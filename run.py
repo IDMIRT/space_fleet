@@ -1,6 +1,7 @@
 from flask import Flask
 import json
 from startsflot import Mission, Spaceship,CrewMember
+import os
 
 
 app = Flask(__name__)
@@ -12,12 +13,34 @@ missions = None
 spaceships = list()
 
 
-def load_data(name_file,data_variable):    
-    with open(name_file,'r') as file:    
-        if bool(json.load(file)):
-            data_variable = json.load(file)
-        else:
-            print(f'Нет данных в {name_file}')
+def load_data(name_file):  
+
+    if os.path.exists(name_file):  
+        list_data = []
+        with open(name_file,'r',encoding='utf-8') as file:    
+            json_data = json.load(file)
+
+            if isinstance(json_data,list):
+                # if not member_dict == None:
+                for value_json in json_data:
+                    new_data_dict = dict()
+                
+                    for key, value in value_json.items():                
+                        new_data_dict[key] = value
+                
+                    list_data.append(new_data_dict)
+                    
+                return list_data
+            else:
+                return None
+    else:
+        print(f'Не найден файл {name_file}')
+        return None
+        
+        # if bool(json.load(file)):
+        #     data_variable = json.load(file)
+        # else:
+        #     print(f'Нет данных в {name_file}')
 
 
 def save_file(name_file,data_variable):
@@ -27,13 +50,18 @@ def save_file(name_file,data_variable):
 
 
 if __name__ == "__main__":
-    member_dict = None
-    load_data('members.json',member_dict)
+    
+    member_dict = load_data('members.json')
 
     # if not member_dict == None:
-
     #     for value_member in member_dict:
-    #         members[key] = value
+    #         new_member = dict()
+
+    #         for key, value in value_member.items():                
+    #             new_member[key] = value
+
+    #         members.append(new_member)
+            
 
 
 
