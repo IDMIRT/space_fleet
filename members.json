@@ -1,0 +1,17 @@
+[
+    {
+        "member_id":1,
+        "name":"David Orland",
+        "role":"Капитан"
+    },
+    {
+        "member_id":2,
+        "name":"Роланд Корнер",
+        "role":"Военный"
+    },
+    {
+        "member_id":3,
+        "name":"Рик Мультяшный",
+        "role":"Ученый"
+    }
+]

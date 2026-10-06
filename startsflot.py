@@ -4,11 +4,11 @@ class CrewMember:
 
     def __init__(self,name,role,member_id=None):
         if member_id == None:
-            self.member_id = uuid.uuid4()
+            self.member_id = int(uuid.uuid4())
         else:
             self.member_id = member_id
         
-        self.member_id = member_id
+        # self.member_id = member_id
         self.name = name
         self.role = role
 
@@ -21,7 +21,7 @@ class Spaceship:
     def __init__(self, name:str, type_:str, spaceship_id=None, status="доступен"):
 
         if spaceship_id == None:
-            self.spaceship_id = uuid.uuid4()
+            self.spaceship_id = int(uuid.uuid4())
         else:
             self.spaceship_id = spaceship_id
 
@@ -68,7 +68,7 @@ class Mission:
     
     def __init__(self, name, goal, mission_id=None, status="в плане"):
         if mission_id == None:
-            self.mission_id = uuid.uuid4()
+            self.mission_id = int(uuid.uuid4())
         else:
             self.mission_id = mission_id
         self.name = name
