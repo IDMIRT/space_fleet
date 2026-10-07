@@ -7,8 +7,8 @@ import os
 app = Flask(__name__)
 
 members = []
-ships = None
-missions = None
+starships = []
+missions = []
 
 spaceships = list()
 
@@ -51,7 +51,21 @@ def save_file(name_file,data_variable):
 
 if __name__ == "__main__":
     
-    member_dict = load_data('members.json')
+    members_dict = load_data('members.json')
+    for value in members_dict:
+        members.append(CrewMember(value['name'],value['role'],value['member_id']))
+
+    ships_dict = load_data('starships.json')
+    for valuе in ships_dict:
+        starships.append(Spaceship(value['name'],value['type'],value['spaceship_id'],value['status']))
+
+    missions_dict = load_data("missions.json")
+    for value in missions_dict:
+        missions.append(Mission(value))
+
+
+
+
 
     # if not member_dict == None:
     #     for value_member in member_dict:

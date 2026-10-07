@@ -1,0 +1,24 @@
+[
+    {
+        "spaceship_id":1,
+        "name":"Варяг",
+        "type":"боевой",
+        "status":"доступен",
+        "members":[]
+    },
+    {
+        "spaceship_id":2,
+        "name":"Витте",
+        "type":"исследовательский",
+        "status":"доступен",
+        "members":[]
+    },
+    {
+        "spaceship_id":13,
+        "name":"Аврора",
+        "type":"боевой",
+        "status":"доступен",
+        "members":[]
+    }
+
+]
