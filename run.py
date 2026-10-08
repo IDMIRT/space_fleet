@@ -35,34 +35,50 @@ def load_data(name_file):
                 return None
     else:
         print(f'Не найден файл {name_file}')
-        return None
-        
-        # if bool(json.load(file)):
-        #     data_variable = json.load(file)
-        # else:
-        #     print(f'Нет данных в {name_file}')
+        return None        
+       
 
 
 def save_file(name_file,data_variable):
     with open(name_file,'w') as file:
         json.dump(data_variable,file, ensure_ascii=False, indent=4)
 
+def return_ship_with_id(id):
+    """по id корабля возращает полный класс и возвращает его"""
+    if not starships == []:
+        for ship in starships:
+            if ship.valuе_ship == id:
+                return ship
+    return None
+
+def return_member_with_id(id):
+    pass
+
+def return_mission_with_id(id):
+    pass
+
+
+    
+    
+
+
 
 
 if __name__ == "__main__":
     
     members_dict = load_data('members.json')
-    for value in members_dict:
-        members.append(CrewMember(value['name'],value['role'],value['member_id']))
+    for value_member in members_dict:
+        members.append(CrewMember(value_member['name'],value_member['role'],value_member['member_id']))
 
     ships_dict = load_data('starships.json')
-    for valuе in ships_dict:
-        starships.append(Spaceship(value['name'],value['type'],value['spaceship_id'],value['status']))
+    for valuе_ship in ships_dict:
+        starships.append(Spaceship(valuе_ship['name'],valuе_ship['type'],valuе_ship['spaceship_id'],valuе_ship['status']))
 
-    missions_dict = load_data("missions.json")
-    for value in missions_dict:
-        missions.append(Mission(value))
+    # missions_dict = load_data("missions.json")
+    # for value in missions_dict:
+    #     missions.append(Mission(value['name'],value['goal'],value['status'],))
 
+    ship_list = [return_ship(ship) for ship  in [1,2,13] if return_ship(ship) != None ]
 
 
 
