@@ -41,7 +41,7 @@ def load_data(name_file):
 
 
 def save_file(name_file,data_variable):
-    with open(name_file,'w') as file:
+    with open(name_file,'w',encoding='utf-8') as file:
         json.dump(data_variable,file, ensure_ascii=False, indent=4)
 
 
@@ -54,8 +54,8 @@ def return_ship_with_id(id):
     return None
 
 
-def return_member_dict_with_id(id):
-    """по id корабля возращает класс CrewMember"""
+def return_member_with_id(id):
+    """по id члена экипажа возращает класс CrewMember"""
     if not members is None:
         for member in members:
             if member.member_id == id:
@@ -64,18 +64,19 @@ def return_member_dict_with_id(id):
 
 
 def save_ships():
+    """сохранение файла json для актуального состояния с массивом"""
     strarships_dict = [ship.get_dict_ships() for ship in starships]
-    
-    with open('starships.json','w', encoding='utf-8') as ship_file:
-        json.dump(strarships_dict, ship_file, ensure_ascii=False, indent=2)
-
-        
-
+    save_file('starships.json',strarships_dict)
+    # with open('starships.json','w', encoding='utf-8') as ship_file:
+    #     json.dump(strarships_dict, ship_file, ensure_ascii=False, indent=2)
 
 
 def return_mission_with_id(id):
     pass 
 
+
+
+# роуты с кораблями
 @app.route('/ship/list',methods=['GET'])
 def return_ships():
     list_spaceships = [ship.get_dict_ships() for ship in starships]
@@ -103,18 +104,66 @@ def ship_add():
     type:str - тип корабля"""
     data_ship = request.get_json(silent=True)
     name = data_ship.get('name')
-    type = data_ship.get('type')
+    type_ship = data_ship.get('type')
 
     if name is None:
-        return "Нет указано имя корабля"
+        return "Нет указано имя корабля",206
     
-    if type is None:
-        return "Не указан тип корабля"
+    if type_ship is None:
+        return "Не указан тип корабля",206
 
-    new_ship = Spaceship(name,type) 
+    new_ship = Spaceship(name,type_ship) 
     starships.append(new_ship)
     save_ships()
     return new_ship.get_dict_ships(),200 
+
+
+@app.route('/ship/delete/<id>',methods=['POST','GET'])
+def ship_delete(id):
+    del_ship = None
+    for index, ship in enumerate(starships):
+        if ship.id == id:
+            del_ship = starships.pop(index)
+            break
+
+    save_ships()        
+    return f"Корабль {del_ship.name} у номером {del_ship.spaceship_id} удален",200
+
+
+@app.route('/ship/addmember/',methods=['POST','GET'])
+def ship_add_member():
+    """добавление члена экипажа к кораблю
+    входящий  Content-Type - application/json 
+    данные в json
+    spaceship_id:id - имя корабля 
+    member_id:int - id члена экипажа"""
+    data = request.get_json(silent=True)
+    id_ship = data.get('spaceship_id')
+    id_member = data.get('member_id')
+    member = return_member_with_id(id)
+    if member is None:
+        return f"Члена экипажа с уид {id} нет в списках"
+    
+    index_ship = None
+    for index, ship in enumerate(starships):
+        if id in ship.members:
+            # member = return_member_with_id(id)
+            return f"Член экипажа {member.name} с УИД {member.member_id} уже является членом экипажа корабля {ship.name}"
+
+        if ship.spaceship_id == id:
+            index_ship = index
+
+    if not index_ship is None:
+        ship[index_ship].members.append(member.member_id)
+        return f"К кораблю {ship[index_ship].name} в экипаж добавлен {member.role} {member.name}"
+
+@app.route('/ship/change_status/',methods=['POST','GET'])
+def ship_change_status():
+    pass
+# работа с кораблями
+
+
+
 
 
 if __name__ == "__main__":
