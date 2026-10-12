@@ -4,20 +4,20 @@
         "name":"Исследователи альтареса",
         "goal":"исследовательская",
         "status":"запланирована",
-        "spacehip":[]
+        "spaceship":[]
     },
     {
         "mission_id":2,
         "name":"Лунный дождь",
         "goal":"боевая",
         "status":"запланирована",
-        "spacehip":[]
+        "spaceship":[]
     },
     {
         "mission_id":2,
         "name":"Марс атакует",
         "goal":"боевая",
         "status":"в процессе",
-        "spacehip":[1,13]
+        "spaceship":[1,13]
     }
 ]

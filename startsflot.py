@@ -15,6 +15,13 @@ class CrewMember:
     def __str__(self):
         return f'{self.name} {self.role}'
 
+    def return_dict_member(self):
+        member_dict = {}
+        member_dict['member_id'] = self.member_id
+        member_dict['name'] = self.name
+        member_dict['role'] = self.role
+        return member_dict
+
 
 class Spaceship:
 
@@ -25,7 +32,7 @@ class Spaceship:
         else:
             self.spaceship_id = spaceship_id
 
-        self.spaceship_id = spaceship_id
+        # self.spaceship_id = spaceship_id
         self.name = name
         self.type_ = type_
         self.status = status
@@ -35,7 +42,7 @@ class Spaceship:
         self.name = new_name if new_name != '' else self.name
 
     def set_status(self, new_status:str):
-        while new_status != None:
+        if new_status != self.status or new_status != None:
             self.status = new_status
 
     def get_staus(self):
@@ -43,6 +50,20 @@ class Spaceship:
 
     def __str__(self):
         return f'Корабль {self.name} тип {self.type_} УИД {self.spaceship_id} имеет статус {self.status}'
+
+    def get_dict_ships(self):
+        ship = {}
+        ship['spaceship_id'] = self.spaceship_id
+        ship['name'] = self.name
+        ship['type'] = self.type_
+        ship['status'] = self.status
+        ship['members'] = self.members
+        return ship
+
+        # if not self.members is None:
+        #     for member in self.members:
+        #         ship['members'] = 
+
 
 # def create_new_starship():
 #     type_starship = {'1':'Боевой','2':'Исследовательский'}    
@@ -100,6 +121,9 @@ class Mission:
 
     def __str__(self):
         return f'Миссия {self.name} имеет статус {self.name}, в составе корабли {' '.join(ship for ship in self.spaceships )}'
+
+    def get_mission_dict(self):
+        pass
 
 # def new_mission():
 #     pass
