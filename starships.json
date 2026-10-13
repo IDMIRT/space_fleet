@@ -1,24 +1,34 @@
 [
-    {
-        "spaceship_id":1,
-        "name":"Варяг",
-        "type":"боевой",
-        "status":"доступен",
-        "members":[]
-    },
-    {
-        "spaceship_id":2,
-        "name":"Витте",
-        "type":"исследовательский",
-        "status":"доступен",
-        "members":[]
-    },
-    {
-        "spaceship_id":13,
-        "name":"Аврора",
-        "type":"боевой",
-        "status":"доступен",
-        "members":[]
-    }
-
+  {
+    "spaceship_id": 1,
+    "name": "Варяг",
+    "type": "боевой",
+    "status": "доступен",
+    "members": [
+      1,
+      2,
+      3
+    ]
+  },
+  {
+    "spaceship_id": 2,
+    "name": "Витте",
+    "type": "исследовательский",
+    "status": "доступен",
+    "members": []
+  },
+  {
+    "spaceship_id": 13,
+    "name": "Аврора",
+    "type": "боевой",
+    "status": "доступен",
+    "members": []
+  },
+  {
+    "spaceship_id": 340124654475983934947424485015446107560,
+    "name": "Варяг2",
+    "type": "боевой",
+    "status": "доступен",
+    "members": []
+  }
 ]

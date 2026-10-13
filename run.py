@@ -65,11 +65,17 @@ def return_member_with_id(id):
 
 
 def save_ships():
-    """сохранение файла json для актуального состояния с массивом"""
+    """сохранение файла json c кораблями для актуального состояния с массивом"""
     strarships_dict = [ship.get_dict_ships() for ship in starships]
     save_file('starships.json',strarships_dict)
     # with open('starships.json','w', encoding='utf-8') as ship_file:
     #     json.dump(strarships_dict, ship_file, ensure_ascii=False, indent=2)
+
+def save_members():
+    """сохранение файла json c членами экипажа для актуального состояния с массивом"""
+    members_dict = [member.get_dict_member() for member in members]
+    save_file('members.json',members_dict)
+
 
 
 def return_mission_with_id(id):
