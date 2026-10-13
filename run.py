@@ -100,27 +100,36 @@ def add_member():
     role = data_member.get('role')
     new_member = CrewMember(name,role)
     members.append(new_member) 
+    save_members()
     return new_member.return_dict_member()
 
-# @app.route('/members/delete/<>')
+
+@app.route('/members/delete/<int:member_id>')
+def member_delete(member_id:int):
+    del_member = None
+    for index, member in enumerate(members):
+        if member['member_id'] == member_id:
+            del_member = members.pop(index)
+
+    #теперь надо удалить member_id члена экипажа из корабля
+    for ship in starships:
+        if ship.members != None:
+            for memberid in ship.members:
+                if memberid == member_id:
+                    ship.members.remove(memberid)
+
+    return f"{del_member.name} удален из списков экипажа"
+
+# @app.route('/member/view/<int:member_id>')
+
+
 
 #роуты с членами экипажа
 
 # роуты с кораблями
 @app.route('/ship/list',methods=['GET'])
 def return_ships():
-    list_spaceships = [ship.get_dict_ships() for ship in starships]
-    # for ship in starships:
-    #     dict_ship = ship.get_dict_ships()
-        # if not dict_ship['members'] is None:
-        #     dict_member = []
-
-        #     for member in dict_ship['members'] :
-        #         dict_member.append(member.return_dict_member())
-        
-        #     dict_ship['members'] = dict_member        
-        
-        # list_spaceships.append(dict_ship)
+    list_spaceships = [ship.get_dict_ships() for ship in starships]  
     return list_spaceships
    
 
@@ -148,7 +157,7 @@ def ship_add():
     return new_ship.get_dict_ships(),200 
 
 
-@app.route('/ship/delete/<id>',methods=['POST','GET'])
+@app.route('/ship/delete/<int:id>',methods=['POST','GET'])
 def ship_delete(id):
     del_ship = None
     for index, ship in enumerate(starships):
@@ -196,11 +205,16 @@ def ship_change_status(spaceship_id:id,status:str):
             old_status = ship.status
             name_ship = ship.name
             ship.status = status
+            break
 
     return f"Корабль {name_ship} сменил статус {old_status} на {status}"
 
 
-# работа с кораблями
+# роуты с кораблями
+
+#роуты миссий
+#роуты миссий
+
 
 
 
