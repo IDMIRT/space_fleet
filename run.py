@@ -14,7 +14,8 @@ missions = []
 spaceships = list()
 
 
-def load_data(name_file):  
+def load_data(name_file): 
+    """процедура загрузки из файла json в массив""" 
 
     if os.path.exists(name_file):  
         list_data = []
@@ -74,7 +75,30 @@ def save_ships():
 def return_mission_with_id(id):
     pass 
 
+#роуты с членами экипажа
+@app.route('/members/list',methods=['GET'])
+def return_members():
+    list_members = [member.return_dict_member() for member in members]
+    return list_members
 
+
+@app.route('/members/add',methods=['POST','GET'])
+def add_member():
+    """процедура добавления члена экипажа
+        входящий  Content-Type - application/json 
+        данные в json
+        name:str - имя члена экипажа 
+        role:str - роль"""
+    data_member =  request.get_json(silent=True)
+    name = data_member.get('name')
+    role = data_member.get('role')
+    new_member = CrewMember(name,role)
+    members.append(new_member) 
+    return new_member.return_dict_member()
+
+# @app.route('/members/delete/<>')
+
+#роуты с членами экипажа
 
 # роуты с кораблями
 @app.route('/ship/list',methods=['GET'])
@@ -157,9 +181,19 @@ def ship_add_member():
         ship[index_ship].members.append(member.member_id)
         return f"К кораблю {ship[index_ship].name} в экипаж добавлен {member.role} {member.name}"
 
-@app.route('/ship/change_status/',methods=['POST','GET'])
-def ship_change_status():
-    pass
+@app.route('/ship/change_status/<int:spaceship_id>/<str:status>',methods=['POST','GET'])
+def ship_change_status(spaceship_id:id,status:str):
+    old_status = None
+    name_ship = None
+    for ship in starships:
+        if ship.spaceship_id == spaceship_id:
+            old_status = ship.status
+            name_ship = ship.name
+            ship.status = status
+
+    return f"Корабль {name_ship} сменил статус {old_status} на {status}"
+
+
 # работа с кораблями
 
 
