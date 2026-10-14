@@ -15,7 +15,7 @@ class CrewMember:
     def __str__(self):
         return f'{self.name} {self.role}'
 
-    def return_dict_member(self):
+    def get_dict_member(self):
         member_dict = {}
         member_dict['member_id'] = self.member_id
         member_dict['name'] = self.name
@@ -59,31 +59,7 @@ class Spaceship:
         ship['status'] = self.status
         ship['members'] = self.members
         return ship
-
-        # if not self.members is None:
-        #     for member in self.members:
-        #         ship['members'] = 
-
-
-# def create_new_starship():
-#     type_starship = {'1':'Боевой','2':'Исследовательский'}    
-
-#     uid_spaceship = uuid.uuid4()
-
-#     name =''
-#     while name=='':
-#         name = input('Введите имя корабля: ')
-
-#     type_ship = ''
-
-#     while type_ship == '':
-#         type_ship = type_starship.get(input('Выберите тип корабля \n1 - боевой,\n2 - исследовательский: '),'')
-
-#     return Spaceship(name,type_ship,uid_spaceship)
-
-
-# new_starship = create_new_starship()
-# print(new_starship)
+        
 
 class Mission:
     
@@ -113,7 +89,7 @@ class Mission:
             print(f'В миссии {self.name} нет корабля {spaceship.name}')
 
     def get_status(self):
-        print(self.status)
+        return self.status
 
     def set_status(self,new_status:str):
         if new_status != '':
@@ -122,8 +98,14 @@ class Mission:
     def __str__(self):
         return f'Миссия {self.name} имеет статус {self.name}, в составе корабли {' '.join(ship for ship in self.spaceships )}'
 
-    def get_mission_dict(self):
-        pass
+    def get_dict_mission(self):
+        mission = {}
+        mission['mission_id'] = self.mission_id
+        mission['name'] = self.name
+        mission['goal'] = self.goal
+        mission['status'] = self.status
+        mission['spaceships'] = self.spaceships
+        return mission
 
 # def new_mission():
 #     pass

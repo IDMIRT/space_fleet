@@ -46,6 +46,23 @@ def save_file(name_file,data_variable):
         json.dump(data_variable,file, ensure_ascii=False, indent=4)
 
 
+def save_ships():
+    """сохранение файла json c кораблями для актуального состояния с массивом"""
+    strarships_dict = [ship.get_dict_ships() for ship in starships]
+    save_file('starships.json',strarships_dict)
+    # with open('starships.json','w', encoding='utf-8') as ship_file:
+    #     json.dump(strarships_dict, ship_file, ensure_ascii=False, indent=2)
+
+def save_members():
+    """сохранение файла json c членами экипажа для актуального состояния с массивом"""
+    members_dict = [member.get_dict_member() for member in members]
+    save_file('members.json',members_dict)
+
+def save_mission():
+    mission_dict = [mission.get_dict_mission() for mission in missions]
+    save_file('missions.json',mission_dict)
+
+
 def return_ship_with_id(id):
     """по id корабля возращает класс Spaceship"""
     if not starships is None:
@@ -64,22 +81,13 @@ def return_member_with_id(id):
     return None
 
 
-def save_ships():
-    """сохранение файла json c кораблями для актуального состояния с массивом"""
-    strarships_dict = [ship.get_dict_ships() for ship in starships]
-    save_file('starships.json',strarships_dict)
-    # with open('starships.json','w', encoding='utf-8') as ship_file:
-    #     json.dump(strarships_dict, ship_file, ensure_ascii=False, indent=2)
-
-def save_members():
-    """сохранение файла json c членами экипажа для актуального состояния с массивом"""
-    members_dict = [member.get_dict_member() for member in members]
-    save_file('members.json',members_dict)
-
-
-
 def return_mission_with_id(id):
-    pass 
+    if not missions is None:
+        for mission in missions:
+            if mission.mission_id == id:
+                return mission
+    return None
+     
 
 #роуты с членами экипажа
 @app.route('/members/list',methods=['GET'])
@@ -128,7 +136,7 @@ def member_delete(member_id:int):
 
 # роуты с кораблями
 @app.route('/ship/list',methods=['GET'])
-def return_ships():
+def ship_list():
     list_spaceships = [ship.get_dict_ships() for ship in starships]  
     return list_spaceships
    
@@ -174,27 +182,29 @@ def ship_add_member():
     """добавление члена экипажа к кораблю
     входящий  Content-Type - application/json 
     данные в json
-    spaceship_id:id - имя корабля 
+    spaceship_id:int - id корабля 
     member_id:int - id члена экипажа"""
     data = request.get_json(silent=True)
     id_ship = data.get('spaceship_id')
     id_member = data.get('member_id')
-    member = return_member_with_id(id)
-    if member is None:
-        return f"Члена экипажа с уид {id} нет в списках"
+    member = return_member_with_id(id_member)
+    if member is None or data is None:
+        return f"Члена экипажа с уид {id_member} нет в списках"
     
     index_ship = None
     for index, ship in enumerate(starships):
-        if id in ship.members:
+        if id_member in ship.members:
             # member = return_member_with_id(id)
-            return f"Член экипажа {member.name} с УИД {member.member_id} уже является членом экипажа корабля {ship.name}"
+            return f"{member.name} с УИД {member.member_id} уже является членом экипажа корабля {ship.name}"
 
-        if ship.spaceship_id == id:
+        if ship.spaceship_id == id_ship:
             index_ship = index
 
     if not index_ship is None:
         ship[index_ship].members.append(member.member_id)
         return f"К кораблю {ship[index_ship].name} в экипаж добавлен {member.role} {member.name}"
+
+    
 
 @app.route('/ship/change_status/<int:spaceship_id>/<str:status>',methods=['POST','GET'])
 def ship_change_status(spaceship_id:id,status:str):
@@ -213,6 +223,42 @@ def ship_change_status(spaceship_id:id,status:str):
 # роуты с кораблями
 
 #роуты миссий
+@app.route('/missions/list',methods=['GET'])
+def mission_list():
+    list_missions = [mission.get_dict_mission() for mission in missions]
+    return list_missions
+
+
+@app.route('/missions/add',methods=['POST','GET'])
+def mission_add():
+    """Создание новой миссии
+        входящий  Content-Type - application/json 
+        данные в json
+        name:str - наименование миссии 
+        goal:str - тип миссии"""
+    data = request.get_json(silent=True)
+    name_misson = data.get('name',None)
+    type_mission = data.get('goal',None)
+
+    if name_misson is None:
+        return "Не заполнено имя миссии"
+
+    if type_mission is None:
+        return "Не указан тип миссии"
+
+    new_mission = Mission(name_misson,type_mission)
+    missions.append(new_mission)
+    save_mission()
+    return new_mission.get_dict_mission(),200
+
+     
+     
+
+
+
+
+
+
 #роуты миссий
 
 
