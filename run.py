@@ -123,10 +123,11 @@ def member_delete(member_id:int):
     for ship in starships:
         if ship.members != None:
             for memberid in ship.members:
-                if memberid == member_id:
-                    ship.members.remove(memberid)
+                # if memberid == member_id:
+                current_ship = ship
+                ship.members.remove(memberid)
 
-    return f"{del_member.name} удален из списков экипажа"
+    return f"{del_member.name} удален из списков экипажа корабля {current_ship.name}"
 
 # @app.route('/member/view/<int:member_id>')
 
@@ -203,7 +204,6 @@ def ship_add_member():
     if not index_ship is None:
         ship[index_ship].members.append(member.member_id)
         return f"К кораблю {ship[index_ship].name} в экипаж добавлен {member.role} {member.name}"
-
     
 
 @app.route('/ship/change_status/<int:spaceship_id>/<str:status>',methods=['POST','GET'])
@@ -251,8 +251,41 @@ def mission_add():
     save_mission()
     return new_mission.get_dict_mission(),200
 
-     
-     
+
+@app.route('/missions/delete/<int:mission_id>',methods=['POST','GET'])
+def mission_delete(mission_id:int):
+    del_mission = None
+    for index,mission in missions:
+        if mission.mission_id == mission_id:
+            del_mission = missions.pop(index)
+
+    if del_mission is None:
+        return f"Миссия с УИД {mission_id} не найдена",404
+    else:
+        dict_mission = del_mission.get_dict_mission()
+        dict_mission.set_status('удалена')
+        return dict_mission,200
+
+
+@app.route('/missions/add_ship/',methods=['POST','GET'])
+def mission_add_ship():
+    """добавление корабля к миссии
+    входящий  Content-Type - application/json 
+    данные в json
+    mission_id:int - id миссии 
+    spaceship_id:int - id корабля"""    
+    data = request.get_json(silent=True)
+    mission_id = data.get('mission_id',None)
+    spaceship_id = data.get('spaceship_id',None)
+
+    mission = return_mission_with_id(mission_id)
+    ship = return_ship_with_id(spaceship_id)
+
+    if mission is None:
+        return f"Миссии с УИД {mission_id} не найдено"
+
+    if ship is None:
+        return f"Корабля с УИД {spaceship_id} не найдено"
 
 
 
