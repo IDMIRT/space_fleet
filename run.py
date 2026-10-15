@@ -89,10 +89,10 @@ def return_mission_with_id(id):
     return None
      
 
-#роуты с членами экипажа
-@app.route('/members/list',methods=['GET'])
+#роуты с членами экипажа 
+@app.route('/members/list',methods=['GET']) #OK
 def return_members():
-    list_members = [member.return_dict_member() for member in members]
+    list_members = [member.get_dict_member() for member in members]
     return list_members
 
 
@@ -109,7 +109,7 @@ def add_member():
     new_member = CrewMember(name,role)
     members.append(new_member) 
     save_members()
-    return new_member.return_dict_member()
+    return new_member.get_dict_member() #для удобства, чтобы проверить что все ОК
 
 
 @app.route('/members/delete/<int:member_id>')
@@ -174,6 +174,10 @@ def ship_delete(id):
             del_ship = starships.pop(index)
             break
 
+    for mission in missions:
+        if del_ship.spaceship_id in mission.spaceship:
+            mission.spaceship.remove(id)
+
     save_ships()        
     return f"Корабль {del_ship.name} у номером {del_ship.spaceship_id} удален",200
 
@@ -189,24 +193,29 @@ def ship_add_member():
     id_ship = data.get('spaceship_id')
     id_member = data.get('member_id')
     member = return_member_with_id(id_member)
-    if member is None or data is None:
+    ship = return_ship_with_id(id_ship)
+
+    if data is None or member is None:
         return f"Члена экипажа с уид {id_member} нет в списках"
     
-    index_ship = None
-    for index, ship in enumerate(starships):
+    # index_ship = None
+    for ship in starships:
         if id_member in ship.members:
             # member = return_member_with_id(id)
             return f"{member.name} с УИД {member.member_id} уже является членом экипажа корабля {ship.name}"
 
-        if ship.spaceship_id == id_ship:
-            index_ship = index
+    ship.members.append(id_member)
+    return f"К кораблю {ship.name} в экипаж добавлен {member.role} {member.name}",200
 
-    if not index_ship is None:
-        ship[index_ship].members.append(member.member_id)
-        return f"К кораблю {ship[index_ship].name} в экипаж добавлен {member.role} {member.name}"
+    #     if ship.spaceship_id == id_ship:
+    #         index_ship = index
+
+    # if not index_ship is None:
+    #     ship[index_ship].members.append(member.member_id)
+    #     return f"К кораблю {ship[index_ship].name} в экипаж добавлен {member.role} {member.name}"
     
 
-@app.route('/ship/change_status/<int:spaceship_id>/<str:status>',methods=['POST','GET'])
+@app.route('/ship/change_status/<int:spaceship_id>/<string:status>',methods=['POST','GET'])
 def ship_change_status(spaceship_id:id,status:str):
     old_status = None
     name_ship = None
@@ -241,10 +250,10 @@ def mission_add():
     type_mission = data.get('goal',None)
 
     if name_misson is None:
-        return "Не заполнено имя миссии"
+        return "Не заполнено имя миссии",404
 
     if type_mission is None:
-        return "Не указан тип миссии"
+        return "Не указан тип миссии",404
 
     new_mission = Mission(name_misson,type_mission)
     missions.append(new_mission)
@@ -286,6 +295,14 @@ def mission_add_ship():
 
     if ship is None:
         return f"Корабля с УИД {spaceship_id} не найдено"
+
+    mission.spaceship.append(ship.spaceship_id)
+    save_mission()
+    return f"К миссии {mission.name} добавлен корабль {ship.name}",200
+
+    
+
+    
 
 
 
