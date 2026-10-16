@@ -49,10 +49,20 @@ GET /ship/view/int:spaceship_id
 
 ##Эндпоинты для планирования и контроля операций флота.
 
-##Возвращает список всех активных и завершенных миссий. GET /missions/list
+##Возвращает список всех активных и завершенных миссий. 
+GET /missions/list
 
-##Создает новую миссию. POST /missions/add Тело запроса (JSON): json { "name": "Название миссии", "goal": "Цель миссии" } Создает объект Mission и сохраняет обновленный список в missions.json.
+##Создает новую миссию. 
+POST /missions/add 
+Тело запроса (JSON): 
+json { "name": "Название миссии", "goal": "Цель миссии" } 
+Создает объект Mission и сохраняет обновленный список в missions.json.
 
-##Удаляет миссию по ID. POST / GET /missions/delete/int:mission_id В ответе возвращается объект удаленной миссии, в котором поле status принудительно меняется на удалена.
+##Удаляет миссию по ID. 
+POST / GET /missions/delete/int:mission_id 
+В ответе возвращается объект удаленной миссии, в котором поле status принудительно меняется на удалена.
 
-##Назначает корабль на выполнение миссии. POST /missions/add_ship Тело запроса (JSON): json { "mission_id": 1, "spaceship_id": 1 } Добавляет spaceship_id в массив spaceships внутри объекта миссии.
+##Назначает корабль на выполнение миссии. 
+POST /missions/add_ship 
+Тело запроса (JSON): json { "mission_id": 1, "spaceship_id": 1 } 
+Добавляет spaceship_id в массив spaceships внутри объекта миссии.
