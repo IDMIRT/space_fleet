@@ -42,10 +42,10 @@ class Spaceship:
         self.name = new_name if new_name != '' else self.name
 
     def set_status(self, new_status:str):
-        if new_status != self.status or new_status != None:
+        if new_status is not None and new_status != self.status:
             self.status = new_status
 
-    def get_staus(self):
+    def get_status(self):
         return self.status
 
     def __str__(self):
@@ -96,7 +96,7 @@ class Mission:
             self.status = new_status
 
     def __str__(self):
-        return f'Миссия {self.name} имеет статус {self.name}, в составе корабли {' '.join(ship for ship in self.spaceships )}'
+        return f'Миссия {self.name} имеет статус {self.status}'
 
     def get_dict_mission(self):
         mission = {}
@@ -107,8 +107,7 @@ class Mission:
         mission['spaceships'] = self.spaceships
         return mission
 
-# def new_mission():
-#     pass
+
 
 
 

@@ -118,7 +118,7 @@ def add_member():
     return new_member.get_dict_member() #для удобства, чтобы проверить что все ОК
 
 
-@app.route('/members/delete/<int:member_id>',methods=['POST','GET']) #OK
+@app.route('/members/delete/<int:member_id>',methods=['DELETE','GET']) #OK
 def member_delete(member_id:int):
     del_member = None
     member = return_member_with_id(member_id)
@@ -187,7 +187,7 @@ def ship_add():
     return new_ship.get_dict_ships(),200 
 
 
-@app.route('/ship/delete/<int:id>',methods=['POST','GET'])
+@app.route('/ship/delete/<int:id>',methods=['DELETE','GET'])
 def ship_delete(id):
     del_ship = None
     for index, ship in enumerate(starships):
@@ -233,7 +233,7 @@ def ship_add_member():
    
     
 
-@app.route('/ship/change_status/<int:spaceship_id>/<string:status>',methods=['POST','GET'])
+@app.route('/ship/change_status/<int:spaceship_id>/<string:status>',methods=['PUT','GET'])
 def ship_change_status(spaceship_id:int,status:str):
     old_status = None
     name_ship = None
@@ -291,7 +291,7 @@ def mission_add():
     return new_mission.get_dict_mission(),200
 
 
-@app.route('/missions/delete/<int:mission_id>',methods=['POST','GET'])
+@app.route('/missions/delete/<int:mission_id>',methods=['DELETE','GET'])
 def mission_delete(mission_id:int):
     del_mission = None
     for index,mission in enumerate(missions):
@@ -341,7 +341,7 @@ if __name__ == "__main__":
 
     ships_dict = load_data('starships.json')
     for value_ship in ships_dict:
-        new_ship = Spaceship(valuе_ship['name'],valuе_ship['type'],valuе_ship['spaceship_id'],valuе_ship['status'])
+        new_ship = Spaceship(value_ship['name'],value_ship['type'],value_ship['spaceship_id'],value_ship['status'])
         
         members_list = []
         if not value_ship['members'] is None:
